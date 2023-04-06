@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
   const [tasks, setTasks] = useState("");
+  const [date, setDate] = useState("");
   const [search, setSearch] = useState("");
   // const token = sessionStorage.getItem("token");
   // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  console.log(userTodos)
+  console.log(userTodos);
 
   useEffect(() => {
     if (search.length === 0) {
@@ -24,7 +26,7 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
       alert("Please enter new tile to change current title.");
     } else {
       const resp = await axios.put(
-        `http://localhost:5000/api/editATodo/${user._id}`,
+        `https://todo-list-server-ashrafulejab.vercel.app/api/editATodo/${user._id}`,
         {
           Title: newTitle,
         }
@@ -38,7 +40,7 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
 
   const handleDeleteTitle = async (user) => {
     const resp = await axios.delete(
-      `http://localhost:5000/api/deleteATodo/${user._id}`
+      `https://todo-list-server-ashrafulejab.vercel.app/api/deleteATodo/${user._id}`
     );
     console.log(resp);
     fetchUserTodos();
@@ -54,30 +56,36 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
 
     const data = {
       Tasks: tasks,
+      Dates: date,
     };
-
+    console.log(title);
+    console.log(data);
     const resp = await axios.put(
-      `http://localhost:5000/api/insertTaskInTodo/${title}`,
+      `https://todo-list-server-ashrafulejab.vercel.app/api/insertTaskInTodo/${title}`,
       data
     );
-    console.log(resp.data.todo.Tasks);
+    if (data.acknowledged === true) {
+      toast.success("Task added successfully ");
+    }
+    console.log(resp.data);
     setTasks("");
     fetchUserTodos();
   };
 
-  // //getting all tasks for the title
-  //   const [titleTasks, setTitleTasks] = useState(null)
+  //getting all tasks for the title
+  // const [titleTasks, setTitleTasks] = useState(null);
 
-  // const getTasksForTitle  = async (props) =>{
+  // const getTasksForTitle = async (props) => {
+  //   const resp = await axios.get(
+  //     `http://localhost:5000/api/TaskInTodo/${props}`
+  //   );
 
-  //   const resp = await axios.get(`/api/TaskInTodo/${props}`)
+  //   console.log("checking all tasks", resp);
 
-  //     console.log("checking all tasks",resp)
-
-  //   if (resp.data.todo.Tasks.length >0) {
-  //     setTitleTasks(resp.data.todo);
-  //   }
-  // }
+  //   // if (resp.data.todo.Tasks.length >0) {
+  //   //   setTitleTasks(resp.data.todo);
+  //   // }
+  // };
 
   //editing a task in todo title
   const handleEditTaskForTitle = async (user, index) => {
@@ -87,7 +95,7 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
       alert("Please enter new task to change current task.");
     } else {
       const resp = await axios.put(
-        `http://localhost:5000/api/editTaskInTodo/${user._id}`,
+        `https://todo-list-server-ashrafulejab.vercel.app/api/editTaskInTodo/${user._id}`,
         {
           taskIndex: index,
           newTaskText: newTask,
@@ -101,7 +109,7 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
   //deleting a task for a specific todo title
   const handleDeleteTaskForTitle = async (user, index) => {
     const resp = await axios.put(
-      `http://localhost:5000/api/deleteTaskInTodo/${user._id}`,
+      `https://todo-list-server-ashrafulejab.vercel.app/api/deleteTaskInTodo/${user._id}`,
       {
         taskToBeDeleted: index,
       }
@@ -114,11 +122,14 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
 
   const submitSearch = async () => {
     try {
-      const resp = await axios.get(`http://localhost:5000/toSearch`, {
-        params: {
-          search,
-        },
-      });
+      const resp = await axios.get(
+        `https://todo-list-server-ashrafulejab.vercel.app/toSearch`,
+        {
+          params: {
+            search,
+          },
+        }
+      );
 
       console.log("searching... ", resp);
 
@@ -150,7 +161,9 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
   const [creationDate, setCreationDate] = useState(null);
 
   const todoCreationDate = async () => {
-    const resp = await axios.get(`http://localhost:5000/sortByDateAndTime`);
+    const resp = await axios.get(
+      `https://todo-list-server-ashrafulejab.vercel.app/sortByDateAndTime`
+    );
     console.log("sort by creation", resp.data.sortedTodosAtCreation);
     setUserTodos(resp.data.sortedTodosAtCreation);
     setCreationDate(resp.data.sortedTodosAtCreation);
@@ -159,7 +172,9 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
   const [updationDate, setUpdationDate] = useState(null);
   //sort by updation
   const todoUpdationDate = async () => {
-    const resp = await axios.get(`http://localhost:5000/sortByDateAndTime`);
+    const resp = await axios.get(
+      `https://todo-list-server-ashrafulejab.vercel.app/sortByDateAndTime`
+    );
     console.log("sort by updation", resp.data.sortedTodosAtUpdation);
     setUserTodos(resp.data.sortedTodosAtUpdation);
     setUpdationDate(resp.data.sortedTodosAtUpdation);
@@ -167,8 +182,9 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
 
   return (
     <div>
-      <form
-        className="todoForm flex flex-row items-center justify-between border-sold border-2 w-[50rem] h-[5rem] rounded-[1rem] bg-[white] mb-[1rem]  "
+      {/* <form
+        className="todoForm flex flex-row items-center
+         justify-between border-sold border-2 w-5/6 h-[5rem] rounded-[1rem] bg-[white] mb-[1rem]  "
         onSubmit={handleSearch}
       >
         <div>
@@ -189,33 +205,39 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
           </button>
         </div>
 
-        <div className="flex flex-row items-center justify-center space-x-4 mr-[1rem]">
+        <div className="flex flex-row items-center justify-center space-x-4 mr-[0.3rem] ">
           <p>Sort</p>
           {/* <select onChange={}  value={}  className=' rounded-[0.5rem]   border-solid border-2 border-bg-gray-300' name="sorting" id="sort">
 <option   value="">Select Option</option>
 <option value="creation"   > By Creation</option>
 <option value="updation">By Updation</option>
 </select> */}
-          <button
+      {/* <button
             type="button"
-            className="text-[#242B2E] bg-[#CAD5E2] px-[1rem] py-[0.5em] rounded-[0.5rem] pointer-cursor font-bold active:bg-violet-700 active:text-white"
+            className="text-[#242B2E] bg-[#CAD5E2] px-[0.4rem] 
+            py-[0.5em] rounded-[0.5rem] pointer-cursor font-bold
+             active:bg-violet-700 active:text-white"
             onClick={todoCreationDate}
           >
             by creation
-          </button>
-          <button
+          </button> */}
+      {/* <button
             type="button"
-            className="text-[#242B2E] bg-[#CAD5E2] px-[1rem] py-[0.5em] rounded-[0.5rem] pointer-cursor font-bold active:bg-violet-700 active:text-white"
+            className="text-[#242B2E] bg-[#CAD5E2] 
+            px-[1rem] py-[0.5em]
+             rounded-[0.5rem] pointer-cursor font-bold active:bg-violet-700 active:text-white"
             onClick={todoUpdationDate}
           >
             by updation
-          </button>
-        </div>
-      </form>
+          </button> */}
+      {/* </div> */}
+      {/* </form>  */}
 
-      <div className="shadow-md bg-slate-100/50  w-[50rem] mx-auto mt-[1rem]">
+      <div className="shadow-md bg-slate-100/50  lg:w-5/6 mx-auto lg:mt-[1rem]">
         {userTodos &&
           userTodos.map((user) => {
+            console.log(user);
+            // console.log(user.task.Tasks);
             return (
               <div className="overflow-hidden ">
                 {/* title bar */}
@@ -274,10 +296,22 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
                         <input
                           type="text"
                           placeholder="Enter tasks"
-                          className="mt-[1.5rem] w-[30rem] h-[2.5rem] rounded-[0.3rem]  px-[1rem] focus:outline-none focus:ring-[0.1rem] focus:ring-gray-500 placeholder:italic  "
+                          className="mt-[1.5rem] lg:w-[30rem] h-[2.5rem] rounded-[0.3rem]  px-[1rem] focus:outline-none focus:ring-[0.1rem] focus:ring-gray-500 placeholder:italic  "
                           value={tasks}
                           onChange={(e) => {
                             setTasks(e.target.value);
+                          }}
+                        />
+                        <input
+                          type="number"
+                          placeholder="Enter Due Date"
+                          className="mt-[1.5rem] lg:w-[30rem] 
+                          mb-6 h-[2.5rem] rounded-[0.3rem] 
+                           px-[1rem] focus:outline-none focus:ring-[0.1rem]
+                            focus:ring-gray-500 placeholder:italic  "
+                          value={date}
+                          onChange={(e) => {
+                            setDate(e.target.value);
                           }}
                         />
                       </div>
@@ -285,46 +319,43 @@ function TodoLists({ fetchUserTodos, userTodos, setUserTodos, BASE_URL }) {
                         <button
                           type="button"
                           onClick={() => handdleTasksForTitle(user._id)}
-                          className=" relative bg-gray-300 active:bg-gray-400 px-[0.8rem] rounded-[0.3rem] top-[0.8rem] "
+                          className=" relative bg-gray-300
+                           active:bg-gray-400 px-[0.8rem] rounded-[0.3rem] top-[0.8rem]  mr-20"
                         >
                           Add
                         </button>
                       </div>
                     </div>
                     {/* Tasks inside title */}
-                   
 
-                    {/* {
-                    user.Tasks.map((tasks, index) => {
-                      console.log(user)
-                      return (
-                        <div className=" flex flex-row items-center justify-between">
-                          <div>
-                            <p className="p-[1.2rem]" key={user._id}>
-                              {tasks}
-                            </p>
-                          </div>
-                          <div className="flex flex-row items-center justify-between mr-[2rem] space-x-[2rem]">
-                            <button
-                              className="bg-gray-300 active:bg-gray-400 px-[0.8rem] rounded-[0.3rem]"
-                              onClick={() => {
-                                handleEditTaskForTitle(user, index);
-                              }}
-                            >
-                              Edit
-                            </button>
-                            <button
-                              className="bg-red-300  active:bg-red-400 px-[0.8rem] rounded-[0.3rem]"
-                              onClick={() => {
-                                handleDeleteTaskForTitle(user, index);
-                              }}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })} */}
+                    <div className=" flex flex-row items-center justify-between">
+                      <div className="flex" key={user._id}>
+                        <p className="p-[1.2rem] mr-6 font-bold">
+                          {/* {user.task.Tasks} */}
+                        </p>
+                        <p className="p-[1.2rem] mr-6 font-bold">
+                          {/* {user.task.Dates} */}
+                        </p>
+                      </div>
+                      <div className="flex flex-row items-center justify-between mr-[2rem] space-x-[2rem]">
+                        <button
+                          className="bg-gray-300 active:bg-gray-400 px-[0.8rem] rounded-[0.3rem]"
+                          onClick={() => {
+                            handleEditTaskForTitle(user);
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="bg-red-300  active:bg-red-400 px-[0.8rem] rounded-[0.3rem]"
+                          onClick={() => {
+                            handleDeleteTaskForTitle(user);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </label>
               </div>

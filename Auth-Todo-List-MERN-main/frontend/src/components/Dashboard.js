@@ -5,7 +5,7 @@ import TodoLists from "./todos/TodoLists";
 function Dashboard() {
   // const token = sessionStorage.getItem("token");
   // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  const BASE_URL = "http://localhost:5000";
+  const BASE_URL = "https://todo-list-server-ashrafulejab.vercel.app";
 
   const [userTodos, setUserTodos] = useState(null);
   //to get all todos
@@ -14,7 +14,7 @@ function Dashboard() {
     const resp = await axios.get(`${BASE_URL}/api/todo`);
     console.log(resp.data);
 
-      setUserTodos(resp.data);
+    setUserTodos(resp.data);
     // if (resp.data.todos.length > 0) {
     // }
   };

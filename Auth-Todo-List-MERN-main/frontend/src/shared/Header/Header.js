@@ -67,7 +67,10 @@ const Header = () => {
                 <li onClick={handleLogout}>
                   <Link
                     to="/login"
-                    className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-purple-400 hover:bg-purple-700 focus:shadow-outline focus:outline-none"
+                    className="inline-flex items-center 
+                justify-center h-12 px-6 font-medium tracking-wide
+                 text-black transition duration-200 rounded shadow-md bg-gray-200
+                  hover:bg-white-100 focus:shadow-outline focus:outline-none"
                     aria-label="Sign up"
                     title="Sign up"
                   >
@@ -195,7 +198,12 @@ const Header = () => {
                           <li onClick={handleLogout}>
                             <Link
                               to="/signin"
-                              className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-purple-400 hover:bg-purple-700 focus:shadow-outline focus:outline-none"
+                              className="inline-flex items-center 
+                          justify-center w-full h-12 px-6
+                           font-medium tracking-wide text-gray-900
+                            transition duration-200 rounded shadow-md
+                             bg-gray-200 hover:bg-gray-100
+                              focus:shadow-outline focus:outline-none"
                               aria-label="Sign up"
                               title="Sign up"
                             >

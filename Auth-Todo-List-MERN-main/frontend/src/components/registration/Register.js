@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import Lottie from "lottie-react";
 import signup from "../../assets/signup.json";
 
-
 const SignUp = () => {
   const {
     register,
@@ -39,21 +38,18 @@ const SignUp = () => {
               role: data.role,
               image: data.photoURL,
             };
-            fetch(
-              "http://localhost:5000/users",
-              {
-                method: "post",
-                headers: {
-                  "content-type": "application/json",
-                },
-                body: JSON.stringify(user),
-              }
-            )
+            fetch("https://todo-list-server-ashrafulejab.vercel.app/users", {
+              method: "post",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify(user),
+            })
               .then((res) => res.json())
               .then((data) => {
                 toast.success("Registration Done");
                 console.log(data);
-               
+
                 setLoader(false);
               });
           })
@@ -210,7 +206,7 @@ const SignUp = () => {
           {" "}
           Already have an account?{" "}
           <Link
-            to="/signin"
+            to="/login"
             className="font-medium text-gray-700 dark:text-gray-200 hover:underline"
           >
             Login
