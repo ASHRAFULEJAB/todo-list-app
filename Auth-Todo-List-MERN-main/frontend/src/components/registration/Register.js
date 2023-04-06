@@ -39,18 +39,21 @@ const SignUp = () => {
               role: data.role,
               image: data.photoURL,
             };
-            fetch("http://localhost:5000/users", {
-              method: "post",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: JSON.stringify(user),
-            })
+            fetch(
+              "http://localhost:5000/users",
+              {
+                method: "post",
+                headers: {
+                  "content-type": "application/json",
+                },
+                body: JSON.stringify(user),
+              }
+            )
               .then((res) => res.json())
               .then((data) => {
                 toast.success("Registration Done");
                 console.log(data);
-
+               
                 setLoader(false);
               });
           })

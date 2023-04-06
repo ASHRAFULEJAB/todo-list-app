@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 import router from "./routes/Routes";
 
 function App() {
-  const BASE_URL = "http://localhost:5000";
+  // const BASE_URL = "http://localhost:3000";
 
   return (
     <RouterProvider router={router}>
